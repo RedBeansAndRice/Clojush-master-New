@@ -312,6 +312,35 @@
     (println (format "Population mean number of perfect (error zero) cases: %.2f"
                      (float (/ (apply + count-zero-by-case) (count population)))))))
 
+(defn zero-pad [sequences]
+  (let [n (apply max (map count sequences))]
+    (map #(take n (concat % (repeat 0)))
+         sequences)))
+
+(defn lwlexicase-report
+  "This extra report is printed whenever lwlexicase selection is used."
+  []
+  (let 
+    [rounds (dec(count(get @michaelsMiniLog :survivalLog)))
+    gens (count(get @michaelsMiniLog :survivalDatabase))]
+    ;(swap! michaelsMiniLog assoc :survivalDatabase  (conj (get @michaelsMiniLog :survivalDatabase) (apply mapv + (zero-pad(get @michaelsMiniLog :survivalLog)))))
+    (loop [newstats []
+      x  [(rest (apply mapv + (zero-pad(get @michaelsMiniLog  :survivalLog))))]]
+      (if (== (count x) 0)
+        (swap! michaelsMiniLog  assoc :survivalDatabase (conj (get @michaelsMiniLog  :survivalDatabase) (first newstats)))
+        (recur (conj newstats (mapv #(/ % rounds) (first x))) (rest x) )))
+
+    (swap! michaelsMiniLog  assoc :survivalStats   (mapv #(/ % gens) (mapv long (apply mapv + (zero-pad(get @michaelsMiniLog :survivalDatabase))))))
+  
+    ;(swap! counter assoc :survivalStats   (apply mapv + (zero-pad(get @counter :survivalDatabase))))
+    (swap! michaelsMiniLog assoc :survivalLog [[]])
+    (println "--- Average survivors left after each case- Current Round: ---" )
+    (println (last (get @michaelsMiniLog :survivalDatabase)))
+    (println "--- Average survivors left after each case- Current Run: ---" )
+    (println (get @michaelsMiniLog :survivalStats))
+  )
+)
+
 
 (defn implicit-fitness-sharing-report
   "This extra report is printed whenever implicit fitness sharing selection is used."
@@ -419,6 +448,9 @@
                   :random-threshold-lexicase :random-toggle-lexicase
                   :randomly-truncated-lexicase})
           (lexicase-report population argmap))
+    (when (some #{parent-selection}
+                #{:LWLexicase })
+          (lwlexicase-report))
     (when (= total-error-method :ifs) (implicit-fitness-sharing-report population argmap))
     (println (format "--- Best Program (%s) Statistics ---" (str "based on " (name err-fn))))
     (r/generation-data! [:best :individual] (dissoc best :program))
@@ -693,7 +725,7 @@
 (defn final-report
   "Prints the final report of a PushGP run if the run is successful."
   [generation best
-   {:keys [error-function final-report-simplifications report-simplifications
+   {:keys [error-function final-report-simplifications report-simplifications parent-selection
            print-ancestors-of-solution problem-specific-report]}]
   (printf "\n\nSUCCESS at generation %s\nSuccessful program: %s\nErrors: %s\nTotal error: %s\nHistory: %s\nSize: %s\n\n"
           generation (pr-str (not-lazy (:program best))) (not-lazy (:errors best)) (:total-error best)
@@ -703,5 +735,9 @@
     (prn (:ancestors best)))
   (let [simplified-best (auto-simplify best error-function final-report-simplifications true 500)]
     (println "\n;;******************************")
+    (when (some #{parent-selection}
+                #{:LWLexicase })
+          (println "Average Survival Rate by Generation:")
+          (println (get @michaelsMiniLog :survivalDatabase)))
     (println ";; Problem-Specific Report of Simplified Solution")
     (problem-specific-report simplified-best [] generation error-function report-simplifications)))

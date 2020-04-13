@@ -1,5 +1,5 @@
 (ns clojush.pushgp.selection.lwlexicase
-  (:use [clojush random]))
+  (:use [clojush globals random]))
 
 (defn shuffle-cases-dup
   [pop argmap]
@@ -22,19 +22,37 @@
   time in random order."
   [pop argmap]
   (loop [survivors pop
-         cases (shuffle-cases-dup pop argmap)]
+         cases (shuffle-cases-dup pop argmap)
+         survivorLog (vector (count pop))]
     (if (or (empty? cases)
             (empty? (rest survivors))
             (< (lrand) (:lexicase-slippage argmap)))
-      (lrand-nth survivors)
-      (let [min-err-for-case (apply min (map #(nth % (first cases))
-                                             (map :errors survivors)))
-	max-err-for-case (apply max (map #(nth % (first cases))
-                                             (map :errors survivors)))]
-	(if max-err-for-case == min-err-for-case)
-		(rest cases)
-        	(recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
-                       survivors)
-               		(rest cases))))))
+      (do
+        (swap! michaelsMiniLog assoc :survivalLog (conj (get @michaelsMiniLog :survivalLog) survivorLog))
+        (lrand-nth survivors)
+      )
+      (do
+        (let [min-err-for-case (apply min (map #(nth % (first cases))
+                                              (map :errors survivors)))
+              max-err-for-case (apply max (map #(nth % (first cases))
+                                              (map :errors survivors)))]
+          (if (= max-err-for-case min-err-for-case)
+              (recur survivors
+                (rest cases)
+                (conj survivorLog (count survivors))
+              )
+            (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
+                              survivors)
+                          (rest cases)
+                          (conj survivorLog (count survivors))
+                    
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
 
 

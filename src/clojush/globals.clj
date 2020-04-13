@@ -98,6 +98,14 @@
 (def frontier (atom []))
 ;; used for preserve-frontier
 
+(def michaelsMiniLog 
+    (atom 
+        {:survivalLog [[]]
+        :survivalDatabase []
+        :survivalStats []
+}))
+;; used to track elimination patterns during selection event
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The globals below may be reset by arguments to pushgp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
