@@ -1,6 +1,6 @@
 (ns clojush.pushgp.selection.selection
   (:use [clojush globals random]
-        [clojush.pushgp.selection preselection tournament lexicase lwlexicase temperedlexicase epsilon-lexicase
+        [clojush.pushgp.selection preselection tournament lexicase lwlexicase oelexicase temperedlexicase epsilon-lexicase
          elitegroup-lexicase random-threshold-lexicase random-toggle-lexicase 
          randomly-truncated-lexicase novelty rarified-lexicase subset-tournament
          fitness-proportionate]))
@@ -17,6 +17,7 @@
                    :tournament (tournament-selection preselected argmap)
                    :lexicase (lexicase-selection preselected argmap)
                    :LWLexicase (lwlexicase-selection preselected argmap)
+                   :OELexicase (oelexicase-selection preselected argmap)
                    :TemperedLexicase (tempered-lexicase-selection preselected argmap)
                    :downsampled-lexicase (lexicase-selection preselected argmap) ;; just uses lexicase; downsampling happens earlier
                    :epsilon-lexicase (case epsilon-lexicase-version

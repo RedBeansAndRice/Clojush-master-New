@@ -14,7 +14,7 @@
              tag zip input-output genome gtm))
      (use '(clojush.pushgp breed genetic-operators pushgp report))
      (use '(clojush.pushgp.selection 
-             selection preselection tournament lexicase lwlexicase temperedlexicase epsilon-lexicase
+             selection preselection tournament lexicase lwlexicase oelexicase temperedlexicase epsilon-lexicase
              elitegroup-lexicase random-threshold-lexicase random-toggle-lexicase 
              randomly-truncated-lexicase implicit-fitness-sharing))))
 

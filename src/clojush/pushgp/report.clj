@@ -318,7 +318,7 @@
          sequences)))
 
 (defn lwlexicase-report
-  "This extra report is printed whenever lwlexicase selection is used."
+  "This extra report is printed whenever lwlexicase (/or oelexicase) selection is used."
   []
   (let 
     [rounds (dec(count(get @michaelsMiniLog :survivalLog)))
@@ -444,12 +444,12 @@
       (println "Error frequencies by case:"
                (doall (map frequencies (apply map vector (map :errors population))))))
     (when (some #{parent-selection}
-                #{:lexicase :LWLexicase :TemperedLexicase :elitegroup-lexicase :leaky-lexicase :epsilon-lexicase
+                #{:lexicase :LWLexicase :OELexicase :TemperedLexicase :elitegroup-lexicase :leaky-lexicase :epsilon-lexicase
                   :random-threshold-lexicase :random-toggle-lexicase
                   :randomly-truncated-lexicase})
           (lexicase-report population argmap))
     (when (some #{parent-selection}
-                #{:LWLexicase })
+                #{:LWLexicase :OELexicase})
           (lwlexicase-report))
     (when (= total-error-method :ifs) (implicit-fitness-sharing-report population argmap))
     (println (format "--- Best Program (%s) Statistics ---" (str "based on " (name err-fn))))
@@ -736,7 +736,7 @@
   (let [simplified-best (auto-simplify best error-function final-report-simplifications true 500)]
     (println "\n;;******************************")
     (when (some #{parent-selection}
-                #{:LWLexicase })
+                #{:LWLexicase :OELexicase})
           (println "Average Survival Rate by Generation:")
           (println (get @michaelsMiniLog :survivalDatabase)))
     (println ";; Problem-Specific Report of Simplified Solution")

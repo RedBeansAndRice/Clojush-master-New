@@ -6,7 +6,7 @@
   to represent each error vector."
   [pop {:keys [parent-selection]}]
   (if (some #{parent-selection}
-            #{:lexicase :LWLexicase :TemperedLexicase :leaky-lexicase :elitegroup-lexicase})
+            #{:lexicase :LWLexicase :OELexicase :TemperedLexicase :leaky-lexicase :elitegroup-lexicase})
     (map lrand-nth (vals (group-by #(:errors %) pop)))
     pop))
 

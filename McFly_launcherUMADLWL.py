@@ -4,6 +4,7 @@ import os, stat, shutil, sys, time
 # Settings
 
 tomsDef = ["compare-string-lengths",
+"digits",
 "double-letters",
 "replace-space-with-newline",
 "string-lengths-backwards",
