@@ -1,7 +1,7 @@
 (ns clojush.pushgp.selection.oelexicase
   (:use [clojush globals random]))
 
-(defn shuffle-cases-dup
+(defn shuffle-cases-dup2
   [pop argmap]
   (if (= (:sort-meta-errors-for-lexicase argmap) :random)
     (lshuffle (range (count (:errors (first pop)))))
@@ -22,7 +22,7 @@
   time in random order."
   [pop argmap]
   (loop [survivors pop
-         cases (shuffle-cases-dup pop argmap)
+         cases (shuffle-cases-dup2 pop argmap)
          survivorLog (vector (count pop))]
     (if (or (empty? cases)
             (empty? (rest survivors))
