@@ -132,5 +132,5 @@ for launchArgs in sys.argv[3:]:
         pixar_string = "/opt/pixar/tractor-blade-1.7.2/python/bin/python2.6 /opt/pixar/tractor-blade-1.7.2/tractor-spool.py --engine=fly:8000"
 
         os.system("%s;%s %s" % (source_string, pixar_string, alf_file_string))
-        time.sleep(300)
+        time.sleep(30)
 
