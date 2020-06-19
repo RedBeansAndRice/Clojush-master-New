@@ -4,6 +4,7 @@ import os, stat, shutil, sys, time
 # Settings
 
 tomsDef = ["compare-string-lengths",
+"digits",
 "double-letters",
 "replace-space-with-newline",
 "string-lengths-backwards",
@@ -16,6 +17,17 @@ tomsDef = ["compare-string-lengths",
 "smallest",
 "syllables"]
 
+nonBins = ["digits",
+"double-letters",
+"replace-space-with-newline",
+"string-lengths-backwards",
+"last-index-of-zero",
+"vector-average",
+"x-word-lines",
+"negative-to-zero",
+"scrabble-score",
+"syllables"]
+
 rest = ["replace-space-with-newline",
 "string-lengths-backwards",
 "vector-average",
@@ -26,7 +38,7 @@ rest = ["replace-space-with-newline",
 "smallest",
 "syllables"]
 
-uMADargs = " :genetic-operator-probabilities \"{:uniform-addition-and-deletion 1}\" :uniform-addition-and-deletion-rate 0.09"
+uMADargs = ' :genetic-operator-probabilities "{:uniform-addition-and-deletion 1}" :uniform-addition-and-deletion-rate 0.09'
 batch_tag = sys.argv[1]
 
 number_runs = int(sys.argv[2])
@@ -38,10 +50,10 @@ for launchArgs in sys.argv[3:]:
 
     
 
-    for problemArgs in rest:
+    for problemArgs in nonBins:
 
         # Change this to the root directory where output should be placed
-        output_directory = "/home/mlg11/results/"
+        output_directory = "/home/mlg11/lwlResults/"
 
         output_directory = output_directory + launchArgs + problemArgs + batch_tag
 

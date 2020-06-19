@@ -4,6 +4,7 @@ import os, stat, shutil, sys, time
 # Settings
 
 tomsDef = ["compare-string-lengths",
+"digits",
 "double-letters",
 "replace-space-with-newline",
 "string-lengths-backwards",
@@ -14,6 +15,17 @@ tomsDef = ["compare-string-lengths",
 "negative-to-zero",
 "scrabble-score",
 "smallest",
+"syllables"]
+
+nonBins = ["digits",
+"double-letters",
+"replace-space-with-newline",
+"string-lengths-backwards",
+"last-index-of-zero",
+"vector-average",
+"x-word-lines",
+"negative-to-zero",
+"scrabble-score",
 "syllables"]
 
 rest = ["replace-space-with-newline",
@@ -38,10 +50,10 @@ for launchArgs in sys.argv[3:]:
 
     
 
-    for problemArgs in rest:
+    for problemArgs in nonBins:
 
         # Change this to the root directory where output should be placed
-        output_directory = "/home/mlg11/results/"
+        output_directory = "/home/mlg11/lwlResults/"
 
         output_directory = output_directory + launchArgs + problemArgs + batch_tag
 

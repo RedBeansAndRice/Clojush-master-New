@@ -36,15 +36,23 @@
                                               (map :errors survivors)))
               max-err-for-case (apply max (map #(nth % (first cases))
                                               (map :errors survivors)))]
-          (if (= max-err-for-case min-err-for-case)
-              (recur survivors
-                (rest cases)
-                (conj survivorLog (count survivors))
+          (if  (= max-err-for-case min-err-for-case) 
+            (recur survivors
+              (rest cases)
+              (conj survivorLog (count survivors))
               )
-            (recur (filter #(or (= (nth (:errors %) (first cases)) min-err-for-case) (= (nth (:errors %) (first cases)) max-err-for-case))
+            (if (empty? (filter #(or (not= (nth (:errors %) (first cases)) min-err-for-case) (not= (nth (:errors %) (first cases)) max-err-for-case))
+                              survivors))
+              (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
+                       survivors)
+               (rest cases)
+               (conj survivorLog (count survivors)))
+            
+              (recur (filter #(or (not= (nth (:errors %) (first cases)) min-err-for-case) (not= (nth (:errors %) (first cases)) max-err-for-case))
                               survivors)
                           (rest cases)
                           (conj survivorLog (count survivors))
+              )
                     
             )
           )

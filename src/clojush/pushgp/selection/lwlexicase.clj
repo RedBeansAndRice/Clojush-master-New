@@ -41,7 +41,7 @@
                 (rest cases)
                 (conj survivorLog (count survivors))
               )
-            (recur (filter #(= (nth (:errors %) (first cases)) min-err-for-case)
+            (recur (filter #(not= (nth (:errors %) (first cases)) max-err-for-case)
                               survivors)
                           (rest cases)
                           (conj survivorLog (count survivors))
